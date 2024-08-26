@@ -1,43 +1,47 @@
 local maxRpm = Config.maxRpm
 local maxSpeed = Config.maxSpeed
-local enabled = false
+local enabled = true
+local allowedClasses = Config.allowedClasses
 
 local function TriggerThrottleControl()
     CreateThread(function()
-        while enabled do
-            local veh = GetVehiclePedIsIn(PlayerPedId())
-            sleep = 50
-            if math.abs(GetVehicleThrottleOffset(veh)) > 0.3 and GetEntitySpeed(veh) * 3.6 <= maxSpeed then
-                sleep = 1
+        while true do
+            if enabled then
+                local veh = GetVehiclePedIsIn(PlayerPedId(), false)
+                local sleep = 50
+                
+                if veh and DoesEntityExist(veh) then
+                    local vehClass = GetVehicleClass(veh)
+                    
+                    if allowedClasses[vehClass] then
+                        if math.abs(GetVehicleThrottleOffset(veh)) > 0.3 and GetEntitySpeed(veh) * 3.6 <= maxSpeed then
+                            sleep = 1
 
-                local rpm = GetVehicleCurrentRpm(veh)
+                            local rpm = GetVehicleCurrentRpm(veh)
 
-                if rpm > maxRpm then
-                    SetVehicleCurrentRpm(veh, maxRpm)
+                            if rpm > maxRpm then
+                                SetVehicleCurrentRpm(veh, maxRpm)
+                            end
+                        end
+                    end
                 end
+                
+                Wait(sleep)
+            else
+                Wait(100)
             end
-            Wait(sleep)
         end
     end)
 end
 
 RegisterCommand('+throttlecontrol', function()
-    local playerPed = PlayerPedId()
-    if IsPedInAnyVehicle(playerPed) then
-        local veh = GetVehiclePedIsIn(playerPed)
-
-        -- Whether or not the ped is the driver
-        if GetPedInVehicleSeat(veh, -1) == playerPed then
-            -- enables the throttle control loop and calls the function
-            enabled = true
-            TriggerThrottleControl()
-        end
-    end
-end, false)
-
-RegisterCommand('-throttlecontrol', function()
-    -- disables the throttle control loop
     enabled = false
 end, false)
 
-RegisterKeyMapping('+throttlecontrol', 'Use smooth throttle control', 'keyboard', Config.keybinds.slow.input)
+RegisterCommand('-throttlecontrol', function()
+    enabled = true
+end, false)
+
+TriggerThrottleControl()
+
+RegisterKeyMapping('+throttlecontrol', 'Disable throttle control while holding', 'keyboard', Config.keybinds.slow.input)
