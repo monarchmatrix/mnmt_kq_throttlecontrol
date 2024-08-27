@@ -2,9 +2,9 @@ Config = {}
 
 Config.maxRpm = 0.2                                -- Max RPM
 
-Config.maxSpeed = 10                               -- The smoothing will not affect the vehicles which drive over this speed
+Config.maxSpeed = 10                               -- The Throttle Control will not affect the vehicles which drive over this speed
 
-Config.smoothingonkey = true                       -- If true then Config.keybinds will enable smoothing and won't be applied by default, if false then will be applied by default and Config.keybinds will disable it.
+Config.defaultsmoothing = false                    -- If true then Config.keybinds will disable Throttle Control and will be applied by default, if false then won't be applied by default and Config.keybinds will enable it.
 
 Config.keybinds = {
     slow = {
@@ -12,7 +12,7 @@ Config.keybinds = {
     }
 }
 
-Config.allowedClasses = {                          -- Define the allowed vehicle classes for smoothing, if false then none of the configuration will work from Config.smoothingonkey
+Config.allowedClasses = {                          -- Define the allowed vehicle classes for Throttle Control, if false then none of the configuration will work from Config.defaultsmoothing
     [0] = true,  -- Compacts
     [1] = true,  -- Sedans
     [2] = true,  -- SUVs
