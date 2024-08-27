@@ -1,22 +1,18 @@
 Config = {}
 
---- Max RPM in percentage
-Config.maxRpm = 0.2
+Config.maxRpm = 0.2                                -- Max RPM
 
---- Speed in KM/h
--- The throttle control will not affect the vehicles which drive over this speed
-Config.maxSpeed = 10
+Config.maxSpeed = 10                               -- The smoothing will not affect the vehicles which drive over this speed
 
--- https://docs.fivem.net/docs/game-references/controls/
--- Use the input index for the "input" value
+Config.smoothingonkey = true                       -- If true then Config.keybinds will enable smoothing and won't be applied by default, if false then will be applied by default and Config.keybinds will disable it.
+
 Config.keybinds = {
     slow = {
-        input = 'lshift',
+        input = 'lshift',                          -- https://docs.fivem.net/docs/game-references/controls/
     }
 }
 
--- Define the allowed vehicle classes for throttle control
-Config.allowedClasses = {
+Config.allowedClasses = {                          -- Define the allowed vehicle classes for smoothing, if false then none of the configuration will work from Config.smoothingonkey
     [0] = true,  -- Compacts
     [1] = true,  -- Sedans
     [2] = true,  -- SUVs
